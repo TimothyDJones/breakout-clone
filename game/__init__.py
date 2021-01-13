@@ -4,6 +4,7 @@ import sys
 # TODO: Load game assets/components.
 from game.constants import Constants
 from game.player import Player
+from game.ball import Ball
 
 class Game():
     def __init__(self):
@@ -15,9 +16,10 @@ class Game():
         self.font = pygame.font.Font("assets/Kenney_Future.ttf", 16)
 
         self.player = Player()
+        self.ball = Ball()
 
         self.all_sprites = pygame.sprite.Group()
-        self.all_sprites.add(self.player)
+        self.all_sprites.add(self.player, self.ball)
 
     def handle_events(self):
         keys = pygame.key.get_pressed()     # Convenience method for *all* key presses
@@ -32,6 +34,10 @@ class Game():
                 sys.exit(0)
 
     def update(self):
+        if self.ball.is_off_screen():
+            self.player.lose_life()
+            self.ball.reset()
+        self.ball.check_collide_paddle(self.player)    
         self.all_sprites.update()
         pygame.display.update()
         self.clock.tick(120)
