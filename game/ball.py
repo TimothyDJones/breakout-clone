@@ -47,5 +47,10 @@ class Ball(pygame.sprite.Sprite):
                     self.velocity[0] = -Constants.max_ball_speed
             else:
                 self.velocity[0] *= -1
+
     def is_off_screen(self):
         return self.y_pos > Constants.screen_height
+
+    def bounce(self):
+        self.velocity[0] = -self.velocity[0]
+        self.velocity[1] = randint(-4, 4)
